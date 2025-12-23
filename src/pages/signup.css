@@ -1,0 +1,155 @@
+/* =======================
+   SIGNUP PAGE WRAPPER
+======================= */
+.signup-page {
+  min-height: calc(100vh - 140px); /* header + footer */
+  display: flex;
+}
+
+/* =======================
+   BACKGROUND WITH IMAGE TRANSITION
+======================= */
+.signup-bg {
+  flex: 1;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-size: cover;
+  background-position: center;
+  animation: bgSliderSignup 18s infinite ease-in-out;
+}
+
+@keyframes bgSliderSignup {
+  0% { background-image: url("https://images.unsplash.com/photo-1500530855697-b586d89ba3ee"); }
+  33% { background-image: url("https://images.unsplash.com/photo-1470770841072-f978cf4d019e"); }
+  66% { background-image: url("https://images.unsplash.com/photo-1441974231531-c6227db76b6e"); }
+  100% { background-image: url("https://images.unsplash.com/photo-1500530855697-b586d89ba3ee"); }
+}
+
+/* =======================
+   OVERLAY
+======================= */
+.signup-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+}
+
+/* =======================
+   GLASS FORM
+======================= */
+.glass-signup {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 360px;
+  padding: 35px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+  text-align: center;
+  color: #fff;
+  animation: fadeSlideSignup 0.9s ease forwards;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.glass-signup:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 16px 50px rgba(0, 0, 0, 0.35);
+}
+
+/* =======================
+   TEXT
+======================= */
+.signup-title {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 12px;
+}
+
+.signup-subtitle {
+  font-size: 14px;
+  margin-bottom: 20px;
+  opacity: 0.85;
+}
+
+/* =======================
+   INPUTS
+======================= */
+.glass-signup input {
+  width: 100%;
+  padding: 12px 15px;
+  margin-bottom: 18px;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  background: rgba(255, 255, 255, 0.25);
+  color: #fff;
+  font-size: 15px;
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.glass-signup input:focus {
+  background: rgba(255, 255, 255, 0.35);
+  transform: scale(1.02);
+}
+
+.glass-signup input::placeholder {
+  color: #f0f0f0;
+  opacity: 0.8;
+}
+
+/* =======================
+   BUTTON
+======================= */
+.signup-btn {
+  width: 100%;
+  padding: 14px;
+  border-radius: 12px;
+  border: none;
+  background: linear-gradient(135deg, #2563eb, #3b82f6); /* vibrant gradient like login */
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  color: #fff;
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 18px rgba(59, 130, 246, 0.4);
+}
+
+.signup-btn:hover {
+  background: linear-gradient(135deg, #1e40af, #2563eb);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(59, 130, 246, 0.6);
+}
+
+/* =======================
+   FOOTNOTE LINKS
+======================= */
+.signup-quote a {
+  color: #2563eb; /* match gradient primary color */
+  font-weight: 700;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.signup-quote a:hover {
+  color: #1e40af;
+    text-decoration: underline; }
+
+/* =======================
+   FORM ANIMATION
+======================= */
+@keyframes fadeSlideSignup {
+  from { opacity: 0; transform: translateY(25px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* =======================
+   RESPONSIVE
+======================= */
+@media (max-width: 480px) {
+  .glass-signup { max-width: 90%; padding: 25px; }
+  .signup-title { font-size: 24px; }
+}

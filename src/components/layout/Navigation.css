@@ -1,0 +1,75 @@
+/* Navigation.css (or Header.css) */
+.navigation {
+  width: 100%;
+  height: 80px; /* Setting a fixed height makes calculations easier */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 50px;
+  background: rgba(20, 20, 20, 0.95);
+  backdrop-filter: blur(12px);
+  position: fixed; /* This is what causes the overlap */
+  top: 0;
+  left: 0;
+  z-index: 1000; /* Keeps it above the Home content */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+/* Brand / Logo */
+.brand {
+  font-size: 1.5rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #38bdf8, #6366f1, #ec4899);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  cursor: pointer;
+}
+
+.nav-links {
+  display: flex;
+  gap: 22px;
+  align-items: center;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  color: #f3f4f6;
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-decoration: none;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.nav-link span {
+  display: inline-block;
+}
+
+.nav-link:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+}
+
+.nav-link.active {
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.1);
+}
+
+/* IMPORTANT: Use this class on your main content wrapper */
+.main-layout {
+  padding-top: 100px; /* This pushes the Home section down so it's visible */
+}
+
+@media (max-width: 768px) {
+  .navigation {
+    padding: 16px 20px;
+  }
+  .nav-link span {
+    display: none; /* Hide text on mobile to save space, or use a hamburger menu */
+  }
+}

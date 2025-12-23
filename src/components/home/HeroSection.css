@@ -1,0 +1,209 @@
+/* ===============================
+   HERO SECTION BASE
+================================ */
+.hero-section {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  color: white;
+  z-index: 0;
+}
+
+/* ===============================
+   BACKGROUND IMAGE SLIDER
+================================ */
+.hero-background-wrapper {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-color: #000; /* fallback */
+}
+
+.bg-slide {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0;
+  animation: fixedFade 20s infinite ease-in-out;
+  transition: transform 1s ease-in-out;
+}
+
+/* ===============================
+   COUNTRY IMAGES
+================================ */
+.china {
+  background-image: url("images/img 1.avif");
+  animation-delay: 0s;
+}
+
+.pakistan {
+  background-image: url("images/img 9.jpg");
+  animation-delay: 4s;
+}
+
+.turkey {
+  background-image: url("images/img 10.avif");
+  animation-delay: 8s;
+}
+
+.japan {
+  background-image: url("images/img 11.avif");
+  animation-delay: 12s;
+}
+
+.france {
+  background-image: url("images/img 12.avif");
+  animation-delay: 16s;
+}
+
+/* ===============================
+   FADE + ZOOM ANIMATION
+================================ */
+@keyframes fixedFade {
+  0% {
+    opacity: 0;
+    transform: scale(1);
+  }
+  10% {
+    opacity: 1;
+  }
+  30% {
+    opacity: 1;
+  }
+  40% {
+    opacity: 0;
+    transform: scale(1.08);
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* ===============================
+   DARK OVERLAY
+================================ */
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at center,
+    rgba(0, 0, 0, 0.2) 0%,
+    rgba(0, 0, 0, 0.7) 100%
+  );
+  z-index: 1;
+}
+
+/* ===============================
+   CONTENT LAYER
+================================ */
+.container,
+.hero-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  max-width: 1100px;
+  padding: 0 20px;
+}
+
+/* ===============================
+   TYPOGRAPHY
+================================ */
+.hero-title {
+  font-size: 4.5rem;
+  line-height: 1.1;
+  margin-bottom: 20px;
+  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+}
+
+.hero-description {
+  font-size: 1.2rem;
+  max-width: 800px;
+  margin: 0 auto 30px;
+  opacity: 0.9;
+}
+
+/* ===============================
+   ACTION BUTTONS
+================================ */
+.hero-actions {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* ===============================
+   QUOTE MARQUEE
+================================ */
+.hero-quote-container {
+  position: absolute;
+  bottom: 80px;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(10px);
+  padding: 12px 0;
+  overflow: hidden;
+  white-space: nowrap;
+  z-index: 2;
+}
+
+.quote-track {
+  display: inline-block;
+  white-space: nowrap;
+  animation: marquee 25s linear infinite; /* linear = constant speed */
+}
+
+.quote-track span {
+  font-size: 0.9rem;
+  font-weight: 300;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  padding: 0 60px;
+  color: #fff; /* ensures visibility */
+}
+
+/* ===============================
+   MARQUEE ANIMATION
+================================ */
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%); /* scroll half the duplicated content */
+  }
+}
+
+/* ===============================
+   RESPONSIVE DESIGN
+================================ */
+@media (max-width: 1024px) {
+  .hero-title {
+    font-size: 3.2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 2.2rem;
+  }
+
+  .hero-description {
+    font-size: 1rem;
+  }
+
+  .hero-actions {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .hero-quote-container {
+    bottom: 50px;
+  }
+}

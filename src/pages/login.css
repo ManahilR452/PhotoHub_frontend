@@ -1,0 +1,222 @@
+/* =======================
+   LOGIN PAGE ROOT
+======================= */
+.login-page {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Inter', sans-serif;
+}
+
+.login-bg {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  animation: bgSlider 18s infinite ease-in-out;
+  position: relative;
+}
+
+/* 3-image background transition */
+@keyframes bgSlider {
+  0% {
+    background-image: url("https://images.unsplash.com/photo-1500530855697-b586d89ba3ee");
+  }
+  33% {
+    background-image: url("https://images.unsplash.com/photo-1470770841072-f978cf4d019e");
+  }
+  66% {
+    background-image: url("https://images.unsplash.com/photo-1441974231531-c6227db76b6e");
+  }
+  100% {
+    background-image: url("https://images.unsplash.com/photo-1500530855697-b586d89ba3ee");
+  }
+}
+
+/* =======================
+   OVERLAY
+======================= */
+.login-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+}
+
+/* =======================
+   GLASS FORM
+======================= */
+.glass-form {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 380px;
+  padding: 35px;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(16px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+  text-align: center;
+  color: #fff;
+  animation: fadeSlide 0.9s ease forwards;
+}
+
+/* =======================
+   TEXT
+======================= */
+.title {
+  font-size: 30px;
+  font-weight: 800;
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  font-size: 15px;
+  margin-bottom: 20px;
+  opacity: 0.9;
+  color: #f0f0f0;
+}
+
+/* =======================
+   MESSAGES
+======================= */
+.info-message {
+  color: #38bdf8;
+  margin-bottom: 10px;
+  font-size: 0.95rem;
+}
+
+.error-message {
+  color: #f87171;
+  margin-bottom: 10px;
+  font-size: 0.95rem;
+}
+
+/* =======================
+   INPUTS
+======================= */
+.glass-form input {
+  width: 100%;
+  padding: 14px;
+  margin-top: 14px;
+  border-radius: 12px;
+  border: none;
+  outline: none;
+  background: rgba(255, 255, 255, 0.3);
+  color: #ffffff;
+  font-size: 15px;
+  transition: 0.3s ease, transform 0.2s;
+}
+
+.glass-form input:focus {
+  background: rgba(255, 255, 255, 0.45);
+  transform: scale(1.02);
+}
+
+.glass-form input::placeholder {
+  color: #e0e0e0;
+  opacity: 0.9;
+}
+
+/* =======================
+   BUTTONS
+======================= */
+.btn {
+  width: 100%;
+  margin-top: 20px;
+  padding: 14px;
+  background: linear-gradient(135deg, #2563eb, #3b82f6);
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  color: white;
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 18px rgba(59, 130, 246, 0.4);
+}
+
+.btn:hover {
+  background: linear-gradient(135deg, #1e40af, #2563eb);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(59, 130, 246, 0.6);
+}
+
+/* Forgot Password Button */
+.forgot-btn {
+  margin-top: 12px;
+  background: transparent;
+  border: none;
+  color: #38bdf8;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.forgot-btn:hover {
+  color: #0ea5e9;
+  text-decoration: underline;
+}
+
+/* =======================
+   LOGIN FOOTER
+======================= */
+.login-footer {
+  margin-top: 10px;
+}
+
+/* =======================
+   FOOTNOTE
+======================= */
+.quote {
+  margin-top: 18px;
+  font-size: 13px;
+  opacity: 0.9;
+  color: #d1d5db;
+}
+
+.quote a {
+  color: #38bdf8;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.quote a:hover {
+  text-decoration: underline;
+  color: #0ea5e9;
+}
+
+/* =======================
+   FORM TRANSITION
+======================= */
+@keyframes fadeSlide {
+  from {
+    opacity: 0;
+    transform: translateY(25px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =======================
+   RESPONSIVE
+======================= */
+@media (max-width: 480px) {
+  .glass-form {
+    max-width: 90%;
+    padding: 25px;
+  }
+  .title {
+    font-size: 24px;
+  }
+  .btn {
+    padding: 12px;
+    font-size: 15px;
+  }
+}

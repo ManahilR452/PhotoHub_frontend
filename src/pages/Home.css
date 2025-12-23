@@ -1,0 +1,52 @@
+/* Layout & Smoothness */
+html {
+  scroll-behavior: smooth;
+}
+
+:root {
+  --photo-gap: 4rem;
+}
+
+.home-page {
+  width: 100%;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Section Spacing */
+.home-page > section {
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Responsiveness */
+@media (max-width: 1024px) {
+  .home-page > section {
+    padding: 3rem 4%;
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --photo-gap: 0rem;
+  }
+
+  .home-page > section {
+    padding: var(--photo-gap) 0rem;
+  }
+
+  /* Ensure images inside components remain fluid */
+  .home-page img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+  }
+}
+
+/* Subtle hover effect for visual feedback */
+.home-page section:hover {
+  background-color: rgba(0, 0, 0, 0.01);
+  transition: background 0.3s ease;
+}
