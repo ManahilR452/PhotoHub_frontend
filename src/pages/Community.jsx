@@ -6,7 +6,9 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import UploadPhoto from './UploadPhoto';
 import './Community.css';
-
+import LikeButton from '../components/shared/LikeButton'; 
+import { Heart } from 'lucide-react'; // Add to imports
+import { likePhoto } from '../api/photoApi'; // Import the function
 export default function Community() {
   const navigate = useNavigate();
   const [currentUser, setCurrentUser] = useState(JSON.parse(localStorage.getItem('currentUser')));
@@ -14,7 +16,6 @@ export default function Community() {
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
   const [photoToDelete, setPhotoToDelete] = useState(null);
   const [uploadDialogOpen, setUploadDialogOpen] = useState(false);
-
   // Fetch photos from backend
   const loadPhotos = async () => {
     try {
@@ -25,11 +26,9 @@ export default function Community() {
       toast.error("Failed to load photos");
     }
   };
-
   useEffect(() => {
     loadPhotos();
   }, []);
-
   const handleLogout = () => {
     localStorage.removeItem('currentUser');
     setCurrentUser(null);
@@ -40,22 +39,19 @@ export default function Community() {
     setPhotoToDelete(photoId);
     setDeleteConfirmOpen(true);
   };
-
   const handleDeletePhoto = async () => {
     if (!photoToDelete) return;
-
     try {
       await axios.delete(`http://localhost:5000/api/photos/${photoToDelete}`);
       toast.success("Photo deleted successfully");
       setDeleteConfirmOpen(false);
       setPhotoToDelete(null);
-      loadPhotos(); // Refresh gallery
+      loadPhotos();
     } catch (err) {
       console.error(err);
       toast.error("Failed to delete photo");
     }
   };
-
   const handleUploadClick = () => {
     if (!currentUser) {
       toast.error('Please login to share a photo');
@@ -64,7 +60,6 @@ export default function Community() {
       setUploadDialogOpen(true);
     }
   };
-
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', {
@@ -75,15 +70,14 @@ export default function Community() {
       minute: '2-digit'
     });
   };
-
+  // PhotoCard Component
   const PhotoCard = ({ photo }) => {
     const canDelete = currentUser && (currentUser.id === photo.uploadedBy || currentUser.isAdmin);
-
     return (
       <div className="photo-card">
         <div className="photo-card-image">
           <img
-            src={`http://localhost:5000${photo.imageUrl}`} // Serve image from backend
+            src={`http://localhost:5000${photo.imageUrl}`}
             alt={`Photo from ${photo.country}`}
             className="photo-image"
           />
@@ -105,8 +99,21 @@ export default function Community() {
             <Calendar className="photo-date-icon" />
             <span>{formatDate(photo.uploadedAt)}</span>
           </div>
+          
+          <div className="photo-info-item">
+            <LikeButton 
+              photoId={photo._id} 
+              initialLikes={photo.likes || 0}
+              onLikeSuccess={(newLikes) => {
+                const updatedPhotos = photos.map(p => 
+                  p._id === photo._id ? { ...p, likes: newLikes } : p
+                );
+                setPhotos(updatedPhotos);
+              }}
+            />
+          </div>
         </div>
-        {canDelete && (
+            {canDelete && (
           <div className="photo-card-footer">
             <button className="delete-button" onClick={() => openDeleteConfirm(photo._id)}>
               <Trash2 className="delete-icon" />
@@ -117,7 +124,94 @@ export default function Community() {
       </div>
     );
   };
-
+  // ← NEW: Best Pics Sidebar Component
+  const BestPicsSidebar = ({ photos }) => {
+    const [winners, setWinners] = useState({});
+    useEffect(() => {
+      calculateWinners();
+    }, [photos]);
+    const calculateWinners = () => {
+      const categories = ['Nature', 'Urban', 'Architecture', 'Wildlife'];
+      const categoryWinners = {};
+      categories.forEach(category => {
+        const categoryPhotos = photos.filter(p => p.category === category);
+             if (categoryPhotos.length === 0) {
+          categoryWinners[category] = null;
+          return;
+        }
+        // Calculate score: likes per day
+        const photosWithScores = categoryPhotos.map(photo => {
+          const likes = photo.likes || 0;
+          if (likes < 3) return { ...photo, score: 0 }; // Minimum threshold
+          const daysSince = Math.max(
+            (Date.now() - new Date(photo.uploadedAt)) / (1000 * 60 * 60 * 24),
+            1
+          );
+          return { ...photo, score: likes / daysSince };
+        });
+        // Pick highest score
+        const winner = photosWithScores
+          .filter(p => p.score > 0)
+          .sort((a, b) => b.score - a.score)[0];
+        categoryWinners[category] = winner || null;
+      });
+      setWinners(categoryWinners);
+    };
+    const categoryIcons = {
+      Nature: '🌲',
+      Urban: '🏙️',
+      Architecture: '🏛️',
+      Wildlife: '🦁'
+    };
+    return (
+      <div className="sidebar-container">
+        <div className="sidebar-header">
+          <div className="sidebar-title">
+            <span className="trophy-icon">🏆</span>
+            <h3>Top Photos This Week</h3>
+          </div>
+          <p className="sidebar-subtitle">Based on likes per day</p>
+        </div>
+        <div className="winners-list">
+          {Object.keys(winners).map(category => {
+            const winner = winners[category];
+            if (!winner) return null;
+            return (
+              <div key={category} className="winner-card-compact">
+                <div className="winner-category-label">
+                  <span className="category-icon">{categoryIcons[category]}</span>
+                  <span className="category-name">{category}</span>
+                </div>
+                <div className="winner-image-compact">
+                  <img
+                    src={`http://localhost:5000${winner.imageUrl}`}
+                    alt={winner.country}
+                  />
+                </div>
+                <div className="winner-info-compact">
+                  <div className="winner-location">
+                    <MapPin size={14} />
+                    <span>{winner.country}</span>
+                  </div>
+                  <div className="winner-stats">
+                    <span className="likes-count">❤️ {winner.likes || 0}</span>
+                    <span className="score-badge">
+                      {winner.score.toFixed(1)} /day
+                    </span>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+        {Object.values(winners).every(w => w === null) && (
+          <div className="no-winners">
+            <p>Upload and like photos to see winners!</p>
+          </div>
+        )}
+      </div>
+    );
+  };
   return (
     <>
       <Toaster position="top-center" richColors />
@@ -154,7 +248,6 @@ export default function Community() {
             </div>
           </div>
         </div>
-
         <div className="community-content">
           <div className="content-header">
             <h2 className="gallery-title">Community Gallery</h2>
@@ -163,20 +256,28 @@ export default function Community() {
               Share Your Photo
             </button>
           </div>
-
-          {photos.length ? (
-            <div className="photo-gallery-grid">
-              {photos.map(photo => <PhotoCard key={photo._id} photo={photo} />)}
+          {/* ← NEW: Two-column layout with sidebar */}
+          <div className="community-layout">
+                      {/* LEFT: Main Gallery */}
+            <div className="main-gallery">
+              {photos.length ? (
+                <div className="photo-gallery-grid">
+                  {photos.map(photo => <PhotoCard key={photo._id} photo={photo} />)}
+                </div>
+              ) : (
+                <div className="empty-gallery">
+                  <div className="empty-gallery-icon">📸</div>
+                  <h3>No Photos Yet</h3>
+                  <p>Be the first to share a photo with the community!</p>
+                </div>
+              )}
             </div>
-          ) : (
-            <div className="empty-gallery">
-              <div className="empty-gallery-icon">📸</div>
-              <h3>No Photos Yet</h3>
-              <p>Be the first to share a photo with the community!</p>
+            {/* RIGHT: Best Pics Sidebar */}
+            <div className="best-pics-sidebar">
+              <BestPicsSidebar photos={photos} />
             </div>
-          )}
+          </div>
         </div>
-
         {/* UploadPhoto Component */}
         {uploadDialogOpen && (
           <UploadPhoto
@@ -184,8 +285,7 @@ export default function Community() {
             currentUser={currentUser}
           />
         )}
-
-        {/* Delete Confirmation Dialog */}
+               {/* Delete Confirmation Dialog */}
         {deleteConfirmOpen && (
           <div className="dialog-overlay" onClick={() => setDeleteConfirmOpen(false)}>
             <div className="dialog-content alert-dialog" onClick={e => e.stopPropagation()}>
