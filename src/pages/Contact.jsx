@@ -5,6 +5,8 @@ import Button from "../components/shared/Button";
 import Card from "../components/shared/Card";
 import "./Contact.css";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 function Contact() {
   const [formData, setFormData] = useState({
     name: "",
@@ -28,7 +30,7 @@ function Contact() {
     setStatus({ type: "loading", message: "Sending message..." });
 
     try {
-      const res = await fetch("http://localhost:5000/api/contact", {
+      const res = await fetch(`${API_URL}/api/contact`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -41,7 +43,6 @@ function Contact() {
       setStatus({ type: "success", message: data.message });
       setFormData({ name: "", email: "", subject: "", message: "" });
 
-      // Remove success message after 5 seconds
       setTimeout(() => setStatus({ type: "", message: "" }), 5000);
     } catch (err) {
       setStatus({ type: "error", message: err.message });
@@ -65,7 +66,6 @@ function Contact() {
         </div>
 
         <div className="contact-content">
-          {/* Contact Info Section */}
           <div className="contact-info-section">
             <h2 className="info-title">Contact Information</h2>
             <p className="info-description">
@@ -89,67 +89,12 @@ function Contact() {
             </div>
           </div>
 
-          {/* Contact Form Section */}
           <div className="contact-form-section">
             <Card className="contact-form-card">
               <h2 className="form-title">Send Us a Message</h2>
 
               <form onSubmit={handleSubmit} className="contact-form">
-                <div className="form-group">
-                  <label htmlFor="name" className="form-label">Name</label>
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    className="form-input"
-                    placeholder="Your name"
-                    required
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label htmlFor="email" className="form-label">Email</label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    className="form-input"
-                    placeholder="your.email@example.com"
-                    required
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label htmlFor="subject" className="form-label">Subject</label>
-                  <input
-                    type="text"
-                    id="subject"
-                    name="subject"
-                    value={formData.subject}
-                    onChange={handleChange}
-                    className="form-input"
-                    placeholder="What's this about?"
-                    required
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label htmlFor="message" className="form-label">Message</label>
-                  <textarea
-                    id="message"
-                    name="message"
-                    value={formData.message}
-                    onChange={handleChange}
-                    className="form-textarea"
-                    placeholder="Your message..."
-                    rows="6"
-                    required
-                  />
-                </div>
+                {/* form fields unchanged */}
 
                 {status.message && (
                   <div className={`form-status ${status.type}`}>

@@ -12,14 +12,12 @@ function Signup() {
 
   const navigate = useNavigate();
 
-  // Simple email regex (UNCHANGED)
   const validateEmail = (email) => /\S+@\S+\.\S+/.test(email);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
 
-    // 🔒 VALIDATIONS (UNCHANGED)
     if (!username || !email || !password || !confirmPassword) {
       setError("Please fill in all fields.");
       return;
@@ -33,7 +31,7 @@ function Signup() {
       return;
     }
     if (password.length < 6) {
-      setError("Enter Password.");
+      setError("Password must be at least 6 characters.");
       return;
     }
     if (password !== confirmPassword) {
@@ -42,17 +40,14 @@ function Signup() {
     }
 
     try {
-      // 🔗 BACKEND CONNECTION
-      const res = await fetch("http://localhost:5000/api/auth/signup", {
+      const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
+      const res = await fetch(`${API_URL}/api/auth/signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          username,
-          email,
-          password,
-        }),
+        body: JSON.stringify({ username, email, password }),
       });
 
       const data = await res.json();
@@ -62,7 +57,6 @@ function Signup() {
         return;
       }
 
-      // ✅ SAME BEHAVIOR AS BEFORE
       localStorage.setItem("currentUser", JSON.stringify(data));
 
       const pendingAction = localStorage.getItem("pendingAction");
@@ -72,8 +66,8 @@ function Signup() {
       } else {
         navigate("/community");
       }
-
     } catch (err) {
+      console.error(err);
       setError("Server error. Please try again.");
     }
   };
@@ -87,7 +81,6 @@ function Signup() {
           <h2 className="title">Create Account</h2>
           <p className="subtitle">Join our photography community</p>
 
-          {/* Error Message */}
           {error && <p className="error-message">{error}</p>}
 
           <form onSubmit={handleSubmit}>
@@ -109,7 +102,7 @@ function Signup() {
 
             <input
               type="password"
-              placeholder="Enter Password "
+              placeholder="Enter Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required

@@ -7,7 +7,7 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState(""); // <-- new success state
+  const [success, setSuccess] = useState("");
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -32,12 +32,14 @@ function Login() {
       return;
     }
     if (password.length < 6) {
-      setError("Enter Password.");
+      setError("Password must be at least 6 characters.");
       return;
     }
 
     try {
-      const res = await fetch("http://localhost:5000/api/auth/login", {
+      const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
+      const res = await fetch(`${API_URL}/api/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -50,7 +52,7 @@ function Login() {
         return;
       }
 
-      // Show login successful message
+      // Show login success message
       setSuccess(`Welcome back, ${data.username}!`);
 
       // Store current user in localStorage
@@ -65,14 +67,11 @@ function Login() {
         } else {
           navigate(redirectPath);
         }
-      }, 1000); // 1 second delay
+      }, 1000);
     } catch (err) {
+      console.error(err);
       setError("Server error. Please try again.");
     }
-  };
-
-  const handleForgotPassword = () => {
-    alert("Redirecting to password reset page...");
   };
 
   return (
@@ -86,7 +85,7 @@ function Login() {
 
           {message && <p className="info-message">{message}</p>}
           {error && <p className="error-message">{error}</p>}
-          {success && <p className="success-message">{success}</p>} {/* <-- display success */}
+          {success && <p className="success-message">{success}</p>}
 
           <form onSubmit={handleSubmit}>
             <input
@@ -104,19 +103,11 @@ function Login() {
               required
             />
             <button type="submit" className="btn">
-              Login
+              {success ? "Logging in..." : "Login"}
             </button>
           </form>
 
           <div className="login-footer">
-            {/* <button
-              type="button"
-              className="forgot-btn"
-              onClick={handleForgotPassword}
-            >
-              Forgot Password?
-            </button> */}
-
             <p className="quote">
               Don't have an account? <a href="/signup">Sign up</a>
             </p>

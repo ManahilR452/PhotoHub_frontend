@@ -19,7 +19,7 @@ export default function Community() {
   // Fetch photos from backend
   const loadPhotos = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/photos');
+      const res = await axios.get(`${API_URL}/api/photos`);
       setPhotos(res.data);
     } catch (err) {
       console.error(err);
@@ -42,7 +42,7 @@ export default function Community() {
   const handleDeletePhoto = async () => {
     if (!photoToDelete) return;
     try {
-      await axios.delete(`http://localhost:5000/api/photos/${photoToDelete}`);
+      await axios.delete(`${API_URL}/api/photos/${photoToDelete}`);
       toast.success("Photo deleted successfully");
       setDeleteConfirmOpen(false);
       setPhotoToDelete(null);
@@ -77,7 +77,7 @@ export default function Community() {
       <div className="photo-card">
         <div className="photo-card-image">
           <img
-            src={`http://localhost:5000${photo.imageUrl}`}
+            src={`${API_URL}${photo.imageUrl}`}
             alt={`Photo from ${photo.country}`}
             className="photo-image"
           />
@@ -184,7 +184,7 @@ export default function Community() {
                 </div>
                 <div className="winner-image-compact">
                   <img
-                    src={`http://localhost:5000${winner.imageUrl}`}
+                    src={`${import.meta.env.VITE_API_URL}${winner.imageUrl}`}
                     alt={winner.country}
                   />
                 </div>

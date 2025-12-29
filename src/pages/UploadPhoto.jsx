@@ -15,7 +15,8 @@ export default function UploadPhoto({ onClose, currentUser }) {
   const [loading, setLoading] = useState(false);
   const fileInputRef = useRef(null);
 
-  // Handle file selection
+  const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
   const handleFileChange = (e) => {
     const file = e.target.files?.[0];
     if (!file?.type.startsWith("image/")) return toast.error("Select a valid image");
@@ -25,7 +26,6 @@ export default function UploadPhoto({ onClose, currentUser }) {
     reader.readAsDataURL(file);
   };
 
-  // Upload image to backend
   const handleUpload = async () => {
     if (!imageFile) return toast.error("Select an image");
     if (!currentUser) return toast.error("User not logged in");
@@ -36,7 +36,7 @@ export default function UploadPhoto({ onClose, currentUser }) {
     if (!country || !category) return toast.error("Country and category are required");
 
     const formData = new FormData();
-    formData.append("image", imageFile); // Must match multer's 'single("image")'
+    formData.append("image", imageFile);
     formData.append("country", country);
     formData.append("category", category);
     formData.append("uploadedBy", currentUser.id);
@@ -44,7 +44,7 @@ export default function UploadPhoto({ onClose, currentUser }) {
 
     try {
       setLoading(true);
-      const res = await axios.post("http://localhost:5000/api/photos/upload", formData, {
+      const res = await axios.post(`${API_URL}/api/photos/upload`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
@@ -79,6 +79,7 @@ export default function UploadPhoto({ onClose, currentUser }) {
         <div className="dialog-body">
           <input type="file" accept="image/*" ref={fileInputRef} onChange={handleFileChange} />
           {imagePreview && <img src={imagePreview} alt="Preview" className="image-preview" />}
+
           <select value={selectedCountry} onChange={(e) => setSelectedCountry(e.target.value)}>
             <option value="">Select country</option>
             <option value="Pakistan">Pakistan</option>
@@ -91,6 +92,7 @@ export default function UploadPhoto({ onClose, currentUser }) {
           {selectedCountry === "other" && (
             <input placeholder="Custom country" value={customCountry} onChange={(e) => setCustomCountry(e.target.value)} />
           )}
+
           <select value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)}>
             <option value="">Select category</option>
             <option value="General">General</option>
